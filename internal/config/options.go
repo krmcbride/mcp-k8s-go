@@ -10,6 +10,8 @@ type Options struct {
 	// AllowedContexts is a list of k8s contexts that users are allowed to access
 	// If empty, all contexts are allowed
 	AllowedContexts []string
+	// Whether or not the exec tool should be disabled, defaults to false (exec enabled)
+	PodExecToolDisabled bool
 }
 
 // GlobalOptions contains the parsed command line options
@@ -19,6 +21,9 @@ var GlobalOptions = &Options{}
 func ParseFlags() bool {
 	var allowedContextsStr string
 	flag.StringVar(&allowedContextsStr, "allowed-contexts", "", "Comma-separated list of allowed k8s contexts. If empty, all contexts are allowed")
+
+	var disablePodExecTool bool
+	flag.BoolVar(&disablePodExecTool, "disable-pod-exec", false, "Whether to disable the Pod exec tool. Defaults to enabled")
 
 	// Add other flags here
 
@@ -42,6 +47,9 @@ func ParseFlags() bool {
 		}
 	}
 
+	// Set the exec flag
+	GlobalOptions.PodExecToolDisabled = disablePodExecTool
+
 	return true
 }
 
@@ -59,4 +67,8 @@ func IsContextAllowed(contextName string) bool {
 	}
 
 	return false
+}
+
+func IsPodExecToolEnabled() bool {
+	return !GlobalOptions.PodExecToolDisabled
 }

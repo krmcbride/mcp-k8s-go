@@ -91,10 +91,12 @@ func printHelp() {
 	println("  version: Print the version, commit and date of the server")
 	println("  --allowed-contexts=<ctx1,ctx2,...>: Comma-separated list of allowed k8s contexts")
 	println("      If not specified, all contexts are allowed")
+	println("  --disable-pod-exec: Whether to disable the pod exec tool")
+	println("      If not specified the pod exec tool is enabled")
 }
 
 func getApp() *app.Builder {
-	return app.
+	builder := app.
 		NewBuilder().
 		WithFxOptions(
 			fx.Provide(func() clientcmd.ClientConfig {
@@ -127,7 +129,6 @@ func getApp() *app.Builder {
 		WithTool(tools.NewGetResourceTool).
 		WithTool(tools.NewListNodesTool).
 		WithTool(tools.NewListEventsTool).
-		WithTool(tools.NewPodExecCommandTool).
 		WithPrompt(prompts.NewListPodsPrompt).
 		WithPrompt(prompts.NewListNamespacesPrompt).
 		WithResourceProvider(resources.NewContextsResourceProvider).
@@ -150,4 +151,10 @@ func getApp() *app.Builder {
 				},
 			)),
 		)
+
+	if config.IsPodExecToolEnabled() {
+		builder.WithTool(tools.NewPodExecCommandTool)
+	}
+
+	return builder
 }
