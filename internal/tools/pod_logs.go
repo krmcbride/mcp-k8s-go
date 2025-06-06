@@ -22,6 +22,7 @@ func NewPodLogsTool(pool k8s.ClientPool) fxctx.Tool {
 		toolinput.WithRequiredString("context", "Name of the Kubernetes context to use"),
 		toolinput.WithRequiredString("namespace", "Name of the namespace where the pod is located"),
 		toolinput.WithRequiredString("pod", "Name of the pod to get logs from"),
+		toolinput.WithString("container", "Optionally specify the container in the pod to get logs from"),
 		toolinput.WithString("sinceDuration", "Only return logs newer than a relative duration like 5s, 2m, or 3h. Only one of sinceTime or sinceDuration may be set."),
 		toolinput.WithString("sinceTime", "Only return logs after a specific date (RFC3339). Only one of sinceTime or sinceDuration may be set."),
 		toolinput.WithBoolean("previousContainer", "Return previous terminated container logs, defaults to false."),
@@ -53,6 +54,8 @@ func NewPodLogsTool(pool k8s.ClientPool) fxctx.Tool {
 				return errResponse(fmt.Errorf("invalid input: %w", err))
 			}
 
+			k8sContainer := input.StringOr("container", "")
+
 			sinceDurationStr := input.StringOr("sinceDuration", "")
 
 			sinceTimeStr := ""
@@ -66,7 +69,8 @@ func NewPodLogsTool(pool k8s.ClientPool) fxctx.Tool {
 			previousContainer := input.BooleanOr("previousContainer", false)
 
 			options := &v1.PodLogOptions{
-				Previous: previousContainer,
+				Previous:  previousContainer,
+				Container: k8sContainer,
 			}
 			if sinceDurationStr != "" {
 				sinceDuration, err := time.ParseDuration(sinceDurationStr)
@@ -96,7 +100,6 @@ func NewPodLogsTool(pool k8s.ClientPool) fxctx.Tool {
 				Do(ctx)
 
 			err = podLogs.Error()
-
 			if err != nil {
 				return errResponse(err)
 			}
