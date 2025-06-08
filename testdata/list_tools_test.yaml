@@ -50,6 +50,33 @@ out:
                 },
             },
             {
+              "name": "get-k8s-pod-top",
+              "description": "Get resource usage (CPU and memory) for a Kubernetes pod using specific context in a specified namespace",
+              "inputSchema":
+                {
+                  "type": "object",
+                  "properties":
+                    {
+                      "context":
+                        {
+                          "description": "Name of the Kubernetes context to use",
+                          "type": "string",
+                        },
+                      "namespace":
+                        {
+                          "description": "Name of the namespace where the pod is located",
+                          "type": "string",
+                        },
+                      "pod":
+                        {
+                          "description": "Name of the pod to get resource usage for",
+                          "type": "string",
+                        },
+                    },
+                  "required": ["context", "namespace", "pod"],
+                },
+            },
+            {
               "name": "get-k8s-resource",
               "description": "Get details of any Kubernetes resource like pod, node or service - completely as JSON or rendered using template",
               "inputSchema":
