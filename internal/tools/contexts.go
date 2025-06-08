@@ -57,14 +57,14 @@ func getListContextsToolContent(cfg api.Config, current string) []interface{} {
 		}
 	}
 
-	var contents = make([]interface{}, allowedContextsCount)
+	contents := make([]interface{}, allowedContextsCount)
 	i := 0
 
 	for name, c := range cfg.Contexts {
 		if k8s.IsContextAllowed(name) {
 			marshalled, err := json.Marshal(ContextJsonEncoded{
 				Context: c,
-				Name:    c.Cluster,
+				Name:    name,
 				Current: name == current,
 			})
 			if err != nil {
