@@ -123,6 +123,7 @@ func getApp() *app.Builder {
 			),
 		).
 		WithTool(tools.NewPodLogsTool).
+		WithTool(tools.NewPodMetricsTool).
 		WithTool(tools.NewListContextsTool).
 		WithTool(tools.NewListNamespacesTool).
 		WithTool(tools.NewListResourcesTool).
