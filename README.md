@@ -38,6 +38,7 @@ MCP 💬 prompt 🗂️ resource 🤖 tool
 - 🤖 Get Kubernetes events
 - 🤖 Get Kubernetes pod logs
 - 🤖 Get Kubernetes pod resource usage (CPU and memory)
+- 🤖 Get Kubernetes node resource usage (CPU and memory)
 - 🤖 Run command in Kubernetes pod
 
 ## Browse With Inspector
