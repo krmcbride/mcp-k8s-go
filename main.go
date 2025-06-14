@@ -7,6 +7,7 @@ import (
 	"github.com/strowk/mcp-k8s-go/internal/config"
 	"github.com/strowk/mcp-k8s-go/internal/k8s"
 	"github.com/strowk/mcp-k8s-go/internal/k8s/apps/v1/deployment"
+	"github.com/strowk/mcp-k8s-go/internal/k8s/core/v1/node"
 	"github.com/strowk/mcp-k8s-go/internal/k8s/core/v1/pod"
 	"github.com/strowk/mcp-k8s-go/internal/k8s/core/v1/service"
 	"github.com/strowk/mcp-k8s-go/internal/k8s/list_mapping"
@@ -125,6 +126,11 @@ func getApp() *app.Builder {
 			fx.Provide(
 				list_mapping.AsMappingResolver(func() list_mapping.ListMappingResolver {
 					return pod.NewListMappingResolver()
+				}),
+			),
+			fx.Provide(
+				list_mapping.AsMappingResolver(func() list_mapping.ListMappingResolver {
+					return node.NewListMappingResolver()
 				}),
 			),
 		).
